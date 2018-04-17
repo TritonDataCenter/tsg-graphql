@@ -1,0 +1,185 @@
+enum Brand {
+  JOYENT
+  JOYENT_MINIMAL
+  LX
+  KVM
+}
+
+enum InstanceState {
+  PROVISIONING
+  RUNNING
+  STOPPING
+  STOPPED
+  DELETED
+  FAILED
+}
+
+input KeyValueInput {
+  name: String!
+  value: String!
+}
+
+type KeyValue {
+  id: ID!
+  name: String!
+  value: String!
+}
+
+type Group {
+  # The universal identifier (UUID) of the group.
+  id: ID!
+  # The name of the group. The group name is limited to a maximum of 182 alphanumeric characters.
+  group_name: String
+  # A unique identifier for the template that the group is associated with.
+  template_id: ID
+  # The number of compute instances to run and maintain a specified number (the "desired count") of instances.
+  capacity: Int
+  # When this group was created. ISO8601 date format.
+  created_at: String
+  # When this group's details were last updated. ISO8601 date format.
+  updated_at: String
+}
+
+type Instance {
+  # Unique id for this instance
+  id: ID
+  # The "friendly" name for this instance
+  name: String
+  # type of instance (e.g. virtualmachine)
+  type: String
+  # The type of instance (e.g. lx)
+  brand: Brand
+  # The current state of this instance (e.g. running)
+  state: InstanceState
+  # The image id this instance was provisioned with
+  image: ID
+  # The amount of RAM this instance has (in MiB)
+  memory: Int
+  # The amount of disk this instance has (in MiB)
+  disk: Int
+  # Any additional metadata this instance has
+  metadata(
+    # Name of metadata value to retrieve
+    name: String
+  ): [KeyValue]
+  # The complete set of tags associated with this machine
+  tags(
+    # Name of tag value to retrieve
+    name: String
+  ): [KeyValue]
+  # When this instance was created
+  created: String
+  # When this instance's details was last updated
+  updated: String
+  # Whether this instance is a Docker container, if present
+  docker: Boolean
+  # The IP addresses this instance has
+  ips: [String]
+  # The networks of the nics this instance has
+  networks: [String]
+  # IP address of the primary nic of this instance
+  primary_ip: String
+  # Whether firewall rules are enforced on this instance
+  firewall_enabled: Boolean
+  # UUID of the server on which the instance is located
+  compute_node: ID
+  # The id or name of the package used to create this instance
+  package: String
+  # DNS names of the instance (if the instance is using CNS)
+  dns_names: [String]
+  # Can the instance be deleted
+  deletion_protection: Boolean
+}
+
+type Template {
+  # The universal identifier (UUID) of the template.
+  id: ID!
+  # The name of the template.
+  template_name: String
+  # The unique identifier (UUID) of the package to use when launching compute instances.
+  package: String
+  # The unique identifier (UUID) of the image to use when launching compute instances.
+  image_id: ID
+  # Whether to enable or disable the firewall on the instances launched. Default is false.
+  firewall_enabled: Boolean
+  # A list of unique network identifiers to attach to the compute instances launched.
+  networks: [String]
+  # Arbitrary data to be copied to the instances on boot. This will not be executed.
+  userdata: String
+  # A mapping of metadata (a key-value pairs) to apply to the instances launched.
+  metadata: [KeyValue]
+  # A mapping of tags (a key-value pairs) to apply to the instances launched.
+  tags: [KeyValue]
+  # When this template was created. ISO8601 date format.
+  created_at: String
+}
+
+type Mutation {
+  # Create a new group.
+  createGroup(
+    # Name of the new group.
+    group_name: String!
+    # UUID of the template to use with this group.
+    template_id: ID!
+    # The number of compute instances to run and maintain a specified number (the "desired count") of instances.
+    capacity: Int!
+  ): Group
+
+  # Update an existing group
+  updateGroup(
+    # UUID of group to update.
+    id: ID!
+    # Updated name of group.
+    group_name: String!
+    # Updated template UUID.
+    template_id: ID!
+    # Updated number of compute instances to run and maintain.
+    capacity: Int!
+  ): Group
+
+  # Delete a group.
+  deleteGroup(id: ID!): Group
+
+  # Create a new template.
+  createTemplate(
+    # The name of the template.
+    template_name: String!
+    # The unique identifier (UUID) of the package to use when launching compute instances.
+    package: String!
+    # The unique identifier (UUID) of the image to use when launching compute instances.
+    image_id: ID!
+    # Whether to enable or disable the firewall on the instances launched.
+    firewall_enabled: Boolean
+    # A list of unique network identifiers to attach to the compute instances launched.
+    networks: [String]
+    # Arbitrary data to be copied to the instances on boot. This will not be executed.
+    userdata: KeyValueInput
+    # A mapping of metadata (a key-value pairs) to apply to the instances launched.
+    metadata: [KeyValueInput]
+    # A mapping of tags (a key-value pairs) to apply to the instances launched.
+    tags: [KeyValueInput]
+  ): Template
+
+  # Delete an existing template.
+  deleteTemplate(id: ID!): Template
+}
+
+type Query {
+  # List all of the existing groups
+  groups: [Group]
+
+  # Retrieve a specific group
+  group(
+    # The universal identifier (UUID) of the group.
+    id: ID!
+  ): Group
+
+  # List all of the existing templates
+  templates: [Template]
+
+  # Retrieve a specific template
+  template(
+    # The universal identifier (UUID) of the template.
+    id: ID!
+  ): Template
+}

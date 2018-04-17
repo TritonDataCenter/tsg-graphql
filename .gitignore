@@ -57,3 +57,11 @@ typings/
 # dotenv environment variables file
 .env
 
+
+doc
+node_modules
+.eslintcache
+.DS_Store
+package-lock.json
+.env
+yarn-error.log

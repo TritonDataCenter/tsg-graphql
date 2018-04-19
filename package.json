@@ -5,7 +5,7 @@
   "main": "lib",
   "scripts": {
     "predev": "npm run graphdoc",
-    "dev": "NODE_ENV=development node --inspect dev-server.js",
+    "dev": "NODE_ENV=development node -r dotenv/config --inspect dev-server.js dotenv_config_path=.env",
     "fake": "graphql-faker ./lib/schema.graphql -p 4000",
     "faker": "graphql-faker ./lib/schema.graphql",
     "graphdoc": "graphdoc -s ./lib/schema.graphql -o ./docs --force",
@@ -26,13 +26,14 @@
   "dependencies": {
     "boom": "7.2.x",
     "bounce": "1.2.x",
-    "webconsole-cloudapi-client": "1.0.x",
-    "graphi": "5.6.x"
+    "graphi": "5.6.x",
+    "wreck": "14.x.x"
   },
   "devDependencies": {
     "@2fd/graphdoc": "2.x.x",
     "belly-button": "4.x.x",
     "code": "5.x.x",
+    "dotenv": "5.x.x",
     "graphql-faker": "1.x.x",
     "graphql-playground-html": "1.x.x",
     "graphql-voyager": "1.0.0-rc.15",

@@ -26,14 +26,14 @@
   "dependencies": {
     "boom": "7.2.x",
     "bounce": "1.2.x",
-    "graphi": "5.6.x",
-    "wreck": "14.x.x"
+    "webconsole-cloudapi-client": "1.1.x"
   },
   "devDependencies": {
     "@2fd/graphdoc": "2.x.x",
     "belly-button": "4.x.x",
     "code": "5.x.x",
     "dotenv": "5.x.x",
+    "graphi": "5.7.x",
     "graphql-faker": "1.x.x",
     "graphql-playground-html": "1.x.x",
     "graphql-voyager": "1.0.0-rc.15",

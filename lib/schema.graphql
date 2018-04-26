@@ -38,6 +38,8 @@ type Group {
   created_at: String
   # When this group's details were last updated. ISO8601 date format.
   updated_at: String
+  # Instances provisioned under this group
+  instances: [Instance]
 }
 
 type Instance {

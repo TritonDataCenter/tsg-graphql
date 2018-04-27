@@ -2,6 +2,7 @@
 
 const { renderVoyagerPage } = require('graphql-voyager/middleware');
 const { renderPlaygroundPage } = require('graphql-playground-html');
+const Graphi = require('graphi');
 const Hapi = require('hapi');
 const Inert = require('inert');
 const Sso = require('hapi-triton-auth');
@@ -73,9 +74,15 @@ const start = async () => {
         }
       },
       {
+        plugin: Graphi,
+        options: {
+          graphiqlPath: '/graphiql',
+          authStrategy: 'sso'
+        }
+      },
+      {
         plugin: TsgGql,
         options: {
-          authStrategy: 'sso',
           keyPath: SDC_KEY_PATH,
           keyId: '/' + SDC_ACCOUNT + '/keys/' + SDC_KEY_ID,
           apiBaseUrl: TSG_URL

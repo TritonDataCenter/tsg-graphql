@@ -1,6 +1,6 @@
 {
   "name": "tsg-graphql",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "GraphQL wrapper for Triton Service Groups",
   "main": "lib",
   "scripts": {
